@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 printf "¿You like to deploy or down the container? (deploy/down): "
 read -r ans
