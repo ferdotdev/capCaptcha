@@ -8,7 +8,7 @@ services:
       ADMIN_KEY: ${ADMIN_KEY}
       ENABLE_ASSETS_SERVER: ${ENABLE_ASSETS_SERVER}
       WIDGET_VERSION: ${WIDGET_VERSION}
-      WASM_VERSION: ${WASM_VERSION}  
+      WASM_VERSION: ${WASM_VERSION}
     volumes:
       - cap-data:/usr/src/app/.data
     restart: unless-stopped
