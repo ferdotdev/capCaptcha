@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-printf "¿You like to deploy or down the container? (deploy/down): "
+printf "Do you want to deploy or bring down the container? (deploy/down): "
 read -r ans
 
 if [[ "$ans" == "deploy" ]]; then
