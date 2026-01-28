@@ -1,6 +1,6 @@
 services:
   cap:
-    image: tiago2/cap:latest
+    image: tiago2/cap:2.1.4
     container_name: cap
     ports:
       - "${CAP_PORT}:3000"
