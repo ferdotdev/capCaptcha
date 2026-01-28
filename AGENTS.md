@@ -1,4 +1,4 @@
-# AGENTS.md — capCaptcha
+# AGENTS.md - capCaptcha
 
 ## Purpose
 This repository is a lightweight wrapper around the upstream `tiago2/cap` Docker image.
@@ -11,15 +11,17 @@ There is no application source code here; treat it as ops/configuration only.
 - Treat this repository as infrastructure configuration.
 
 ## Quick orientation
-- `docker/dev/compose.yaml`: Development Docker Compose definition.
-- `docker/prod/compose.yaml`: Placeholder for production compose (currently empty).
-- `docker/dev/.env.example`: Sample environment values for the dev container.
-- `docker/prod/.env.example`: Sample environment values for production.
-- `up.sh`: Convenience script to start the dev container.
+- `docker/dev/compose.yaml`: Development Docker Compose definition (image `tiago2/cap:latest`).
+- `docker/prod/compose.yaml`: Production compose definition (image `tiago2/cap:2.1.4`).
+- `docker/dev/.env.example`: Example env values for dev.
+- `docker/prod/.env.example`: Example env values for prod.
+- `docker/dev/.env`: Local dev secrets (do not commit real credentials).
+- `up.sh`: Interactive helper to deploy/down the dev container.
 - `README.md`: Minimal repo description.
+- `.dockerignore`, `LICENSE`: Standard metadata.
 
 ## Runtime access
-- App served at `http://localhost:10500` after container start.
+- App served at `http://localhost:${CAP_PORT}` after container start.
 - Admin key uses `ADMIN_KEY`; keep it secret and local.
 - Static assets served when `ENABLE_ASSETS_SERVER=true`.
 - Data persists in the Docker volume `cap-data`.
@@ -30,9 +32,10 @@ All build/test workflows live in the upstream `tiago2/cap` project.
 Do not add build tooling unless explicitly requested.
 
 ### Common commands
-- Start dev container: `./up.sh`
-- Start (explicit compose): `docker compose -f docker/dev/compose.yaml up -d`
-- Stop dev container: `docker compose -f docker/dev/compose.yaml down`
+- Start dev container (interactive): `./up.sh` then choose `deploy`.
+- Stop dev container (interactive): `./up.sh` then choose `down`.
+- Start dev container (non-interactive): `docker compose -f docker/dev/compose.yaml up -d`
+- Stop dev container (non-interactive): `docker compose -f docker/dev/compose.yaml down`
 - Check running services: `docker compose -f docker/dev/compose.yaml ps`
 - View logs: `docker logs -f cap`
 - Restart container: `docker compose -f docker/dev/compose.yaml restart cap`
@@ -53,15 +56,15 @@ Do not add build tooling unless explicitly requested.
 
 ## Configuration and environment
 - `docker/dev/compose.yaml` defines the `cap` service.
-- The container exposes port `10500` → `3000`.
-- Env vars: `ADMIN_KEY`, `ENABLE_ASSETS_SERVER`, `WIDGET_VERSION`, `WASM_VERSION`.
+- The container exposes `${CAP_PORT}` on host -> `3000` in the container.
+- Env vars: `CAP_PORT`, `ADMIN_KEY`, `ENABLE_ASSETS_SERVER`, `WIDGET_VERSION`, `WASM_VERSION`.
 - `.env` files are for local secrets; do not commit real credentials.
 - Prefer editing `.env.example` to document new vars.
 - Keep `.env` files in sync with compose defaults.
 
 ## Change checklist
 - Keep `up.sh` pointing at the correct compose file.
-- Update `.env.example` for any new env vars.
+- Update `docker/dev/.env.example` and `docker/prod/.env.example` for any new env vars.
 - Keep port mappings consistent across docs and compose.
 - Confirm volume names match existing data.
 - Avoid committing `.env` with secrets.
@@ -71,17 +74,18 @@ Do not add build tooling unless explicitly requested.
 There is no application code here. Apply these rules to scripts, YAML, and configs.
 
 ### Shell scripts (`.sh`)
-- Use `#!/bin/bash`.
+- Use `#!/usr/bin/env bash`.
 - Keep scripts short and explicit; avoid clever one-liners.
 - Quote variables and paths (`"$VAR"`) unless word splitting is intended.
 - For non-trivial scripts, use `set -euo pipefail`.
 - Prefer long-form flags for readability.
 - Use `printf` for predictable output; avoid echo flags.
 - Exit non-zero on failure; propagate command errors.
+- Avoid interactive prompts in automation; prefer explicit flags or docs.
 
 ### YAML / Compose files
 - Two-space indentation; never tabs.
-- Keep keys ordered logically: `services` → service → image/ports/environment/volumes/restart.
+- Keep keys ordered logically: `services` -> service -> image/ports/environment/volumes/restart.
 - Quote port mappings as strings.
 - Use environment variables for secrets; avoid hardcoded values.
 - Keep blank lines between top-level sections for readability.
@@ -103,7 +107,7 @@ There is no application code here. Apply these rules to scripts, YAML, and confi
 ### Imports and module structure
 - This repo does not contain application source code.
 - If you add scripts in JS/TS/Python, follow upstream conventions.
-- Suggested import order: standard library → third-party → local.
+- Suggested import order: standard library -> third-party -> local.
 - Keep import lists sorted and avoid unused imports.
 - Prefer absolute paths only when consistent with upstream.
 
