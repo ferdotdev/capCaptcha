@@ -15,7 +15,6 @@ There is no application source code here; treat it as ops/configuration only.
 - `docker/prod/compose.yaml`: Placeholder for production compose (currently empty).
 - `docker/dev/.env.example`: Sample environment values for the dev container.
 - `docker/prod/.env.example`: Sample environment values for production.
-- `.env.example`: Placeholder for repo-level env vars (unused).
 - `up.sh`: Convenience script to start the dev container.
 - `README.md`: Minimal repo description.
 
