@@ -1,0 +1,17 @@
+services:
+  cap:
+    image: tiago2/cap:latest
+    container_name: cap
+    ports:
+      - "${CAP_PORT}:3000"
+    environment:
+      ADMIN_KEY: ${ADMIN_KEY}
+      ENABLE_ASSETS_SERVER: ${ENABLE_ASSETS_SERVER}
+      WIDGET_VERSION: ${WIDGET_VERSION}
+      WASM_VERSION: ${WASM_VERSION}
+    volumes:
+      - cap-data:/usr/src/app/.data
+    restart: unless-stopped
+
+volumes:
+  cap-data:
