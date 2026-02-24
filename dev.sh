@@ -6,14 +6,15 @@ while :; do
 	case "$ans" in
 		deploy)
 			docker compose -f docker/dev/compose.yaml up -d
-			printf "Shipped\n"
+			printf '%s\n' "Shipped"
 			;;
 		down)
 			docker compose -f docker/dev/compose.yaml down
-			printf "Removed\n"
+			printf '%s\n' "Removed"
 			;;
 		*)
-			printf "Invalid option: %s. Please enter 'deploy' or 'down'.\n" "$ans"
+			printf '%s\n' "Invalid option!"
+			printf '%s\n' "Please enter 'deploy' or 'down'"
 			;;
 	esac
 done
