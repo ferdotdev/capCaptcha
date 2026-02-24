@@ -16,7 +16,8 @@ There is no application source code here; treat it as ops/configuration only.
 - `docker/dev/.env.example`: Example env values for dev.
 - `docker/prod/.env.example`: Example env values for prod.
 - `docker/dev/.env`: Local dev secrets (do not commit real credentials).
-- `up.sh`: Interactive helper to deploy/down the dev container.
+- `dev.sh`: Interactive helper to deploy/down the dev container.
+- `prod.sh`: Interactive helper to deploy/down the prod container.
 - `README.md`: Minimal repo description.
 - `.dockerignore`, `LICENSE`: Standard metadata.
 
@@ -32,11 +33,14 @@ All build/test workflows live in the upstream `tiago2/cap` project.
 Do not add build tooling unless explicitly requested.
 
 ### Common commands
-- Start dev container (interactive): `./up.sh` then choose `deploy`.
-- Stop dev container (interactive): `./up.sh` then choose `down`.
+- Start dev container (interactive): `./dev.sh` then choose `deploy`.
+- Stop dev container (interactive): `./dev.sh` then choose `down`.
+- Start prod container (interactive): `./prod.sh` then choose `deploy`.
+- Stop prod container (interactive): `./prod.sh` then choose `down`.
 - Start dev container (non-interactive): `docker compose -f docker/dev/compose.yaml up -d`
 - Stop dev container (non-interactive): `docker compose -f docker/dev/compose.yaml down`
 - Check running services: `docker compose -f docker/dev/compose.yaml ps`
+- Check prod services: `docker compose -f docker/prod/compose.yaml ps`
 - View logs: `docker logs -f cap`
 - Restart container: `docker compose -f docker/dev/compose.yaml restart cap`
 
@@ -57,13 +61,13 @@ Do not add build tooling unless explicitly requested.
 ## Configuration and environment
 - `docker/dev/compose.yaml` defines the `cap` service.
 - The container exposes `${CAP_PORT}` on host -> `3000` in the container.
-- Env vars: `CAP_PORT`, `ADMIN_KEY`, `ENABLE_ASSETS_SERVER`, `WIDGET_VERSION`, `WASM_VERSION`.
+- Env vars: `CAP_PORT`, `CORS_ORIGIN`, `ADMIN_KEY`, `ENABLE_ASSETS_SERVER`, `WIDGET_VERSION`, `WASM_VERSION`.
 - `.env` files are for local secrets; do not commit real credentials.
 - Prefer editing `.env.example` to document new vars.
 - Keep `.env` files in sync with compose defaults.
 
 ## Change checklist
-- Keep `up.sh` pointing at the correct compose file.
+- Keep `dev.sh` and `prod.sh` pointing at the correct compose files.
 - Update `docker/dev/.env.example` and `docker/prod/.env.example` for any new env vars.
 - Keep port mappings consistent across docs and compose.
 - Confirm volume names match existing data.
@@ -100,7 +104,7 @@ There is no application code here. Apply these rules to scripts, YAML, and confi
 ### Naming conventions
 - Container names: short, descriptive (`cap`).
 - Volume names: kebab-case or snake_case (`cap-data`).
-- Script names: lower-case with dashes if needed (`up.sh`).
+- Script names: lower-case (`dev.sh`, `prod.sh`).
 - Environment variables: `SCREAMING_SNAKE_CASE`.
 - Service names in compose: lower-case.
 
